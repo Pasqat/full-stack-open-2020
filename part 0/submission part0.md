@@ -36,7 +36,7 @@ end note
 
 
 
-![Annotazione2020-06-27095039](.\Annotazione2020-06-27095039.png)
+![Annotazione2020-06-27095039](Annotazione2020-06-27095039.png)
 
 
 
@@ -88,5 +88,5 @@ but the content was already update with javascript
 end note
 ```
 
-![Annotazione2020-06-27100209](.\Annotazione2020-06-27100209.png)
+![Annotazione2020-06-27100209](Annotazione2020-06-27100209.png)
 
