@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-import { baseURL } from "./sources/wheater";
+import { baseURL } from "./sources/weather";
 
 const App = () => {
   const [countriesList, setCountriesList] = useState([]);
   const [filter, setFilter] = useState("");
-  const [wheater, setWheater] = useState("");
+  const [weather, setweather] = useState("");
 
-  const API_KEY = process.env.REACT_APP_WHEATER_API_KEY;
+  const API_KEY = process.env.REACT_APP_weather_API_KEY;
 
   useEffect(() => {
     axios
@@ -41,7 +41,7 @@ const App = () => {
         .get(
           `${baseURL}/current?access_key=${API_KEY}&query=${filteredList[0].capital}`
         )
-        .then((response) => setWheater(response.data.current));
+        .then((response) => setweather(response.data.current));
       return (
         <div>
           <h1>{filteredList[0].name}</h1>
@@ -61,12 +61,12 @@ const App = () => {
           <h3>Weather in {filteredList[0].capital}</h3>
           <p>
             <span style={{ fontWeight: "bold" }}>temperature</span>{" "}
-            {wheater.temperature} celsius
+            {weather.temperature} celsius
           </p>
-          <img alt="icon" src={wheater.weather_icons} />
+          <img alt="icon" src={weather.weather_icons} />
           <p>
             <span style={{ fontWeight: "bold" }}>wind</span>{" "}
-            {wheater.wind_speed} mph direction {wheater.wind_dir}
+            {weather.wind_speed} mph direction {weather.wind_dir}
           </p>
         </div>
       );

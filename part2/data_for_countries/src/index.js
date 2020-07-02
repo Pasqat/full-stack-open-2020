@@ -1,5 +1,3 @@
-// https://restcountries.eu/rest/v2/all?fields=name;capital;population;languages;flag
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 
