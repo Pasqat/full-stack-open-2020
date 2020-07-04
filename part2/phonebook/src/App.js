@@ -1,21 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { getAll, create, update, remove } from "./services/api";
-import "./App.css";
+import axios from "axios";
 
 import Filter from "./components/Filter";
 import AddNewPerson from "./components/AddNewPerson";
 import PersonsList from "./components/PersonsList";
 
 const App = () => {
-  const [persons, setPersons] = useState([]);
+  const [persons, setPersons] = useState([
+    // { name: "Arto Hellas", number: "040-123456" },
+    // { name: "Ada Lovelace", number: "39-44-5323523" },
+    // { name: "Dan Abramov", number: "12-43-234345" },
+    // { name: "Mary Poppendieck", number: "39-23-6423122" },
+  ]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
-  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
-    getAll().then((initialPersons) => {
-      setPersons(initialPersons);
+    console.log("rendered");
+    axios.get("http://localhost:3001/persons").then((response) => {
+      console.log("promise fulfulled");
+      setPersons(response.data);
     });
   }, []);
 
@@ -26,69 +31,13 @@ const App = () => {
       (person) => person.name.toLowerCase() === newName.toLowerCase()
     );
 
-    const personObject = {
-      name: newName,
-      number: newNumber,
-    };
-
     if (personExist) {
-      if (
-        window.confirm(
-          `${personExist.name} is already added to phonebook, replace the old number with a new one?`
-        )
-      ) {
-        update(personExist.id, personObject)
-          .then((returnedPerson) => {
-            setPersons(
-              persons.map((person) =>
-                person.name !== personExist.name ? person : returnedPerson
-              )
-            );
-            setNotification({
-              error: false,
-              message: `The old number of ${returnedPerson.name} successfully update`,
-            });
-            setTimeout(() => {
-              setNotification(null);
-            }, 5000);
-          })
-          .catch((err) => {
-            setNotification({
-              error: true,
-              message: `${personExist.name} was already deleted from server`,
-            });
-            setTimeout(() => {
-              setNotification(null);
-            }, 5000);
-            setPersons(
-              persons.filter((person) => person.id !== personExist.id)
-            );
-          });
-      }
-
-      setNewName("");
-      setNewNumber("");
-      return;
+      return alert(`${newName} is already added to phonebook`);
     }
 
-    create(personObject)
-        .then((returnedPerson) => {
-          setPersons(persons.concat(returnedPerson));
-          setNewName("");
-          setNewNumber("");
-          setNotification({
-            error: false,
-            message: `${returnedPerson.name} successfully added to phonebook`,
-          });
-          setTimeout(() => {
-            setNotification(null);
-          }, 5000);
-    });
-  };
-
-  const removeButton = (id) => {
-    remove(id);
-    setPersons(persons.filter((person) => person.id !== id));
+    setPersons(persons.concat({ name: newName, number: newNumber }));
+    setNewName("");
+    setNewNumber("");
   };
 
   const handleChangeName = (e) => {
@@ -104,23 +53,9 @@ const App = () => {
     setFilter(e.target.value);
   };
 
-  const Notification = ({ message }) => {
-    if (message === null) {
-      return null;
-    }
-
-    return (
-      <div className={message.error ? "error" : "success"}>
-        {message.message}
-      </div>
-    );
-  };
-
   return (
     <div>
       <h2>Phonebook</h2>
-
-      <Notification message={notification} />
 
       <Filter text={filter} filterPhoneBook={filterPhoneBook} />
 
@@ -136,11 +71,7 @@ const App = () => {
 
       <h2>Numbers</h2>
 
-      <PersonsList
-        persons={persons}
-        filter={filter}
-        removeButton={removeButton}
-      />
+      <PersonsList persons={persons} filter={filter} />
     </div>
   );
 };
