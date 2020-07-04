@@ -1,6 +1,6 @@
 import React from "react";
 
-const PersonsList = ({ persons, filter }) => {
+const PersonsList = ({ persons, filter, removeButton }) => {
   return (
     <div>
       {persons.map((person) => {
@@ -8,6 +8,7 @@ const PersonsList = ({ persons, filter }) => {
           return (
             <p key={person.name}>
               {person.name} {person.number}
+              <button onClick={() => removeButton(person.id)}>❌</button>
             </p>
           );
         }
@@ -18,3 +19,4 @@ const PersonsList = ({ persons, filter }) => {
 };
 
 export default PersonsList;
+
