@@ -7,7 +7,28 @@ import AddNewPerson from "./components/AddNewPerson";
 import PersonsList from "./components/PersonsList";
 
 const App = () => {
-  const [persons, setPersons] = useState([]);
+  const [persons, setPersons] = useState([
+    // {
+    //   id: 1,
+    //   name: "Arto Hellas",
+    //   number: "040-123456",
+    // },
+    // {
+    //   id: 2,
+    //   name: "Ada Lovelance",
+    //   number: "39-44-52342342",
+    // },
+    // {
+    //   id: 3,
+    //   name: "Dan Abramov",
+    //   number: "12-43-1234543",
+    // },
+    // {
+    //   id: 4,
+    //   name: "Mary Poppins",
+    //   number: "39-32-987654",
+    // },
+  ]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
@@ -53,16 +74,26 @@ const App = () => {
             }, 5000);
           })
           .catch((err) => {
-            setNotification({
-              error: true,
-              message: `${personExist.name} was already deleted from server`,
-            });
+            if (
+              err.response.data.includes("Cannot read property 'ownerDocument'")
+            ) {
+              setNotification({
+                error: true,
+                message: `${personExist.name} already deleted from our server`,
+              });
+              setPersons(
+                persons.filter((person) => person.id !== personExist.id)
+              );
+            } else {
+              setNotification({
+                error: true,
+                message: err.response.data,
+              });
+            }
+
             setTimeout(() => {
               setNotification(null);
             }, 5000);
-            setPersons(
-              persons.filter((person) => person.id !== personExist.id)
-            );
           });
       }
 
@@ -72,18 +103,28 @@ const App = () => {
     }
 
     create(personObject)
-        .then((returnedPerson) => {
-          setPersons(persons.concat(returnedPerson));
-          setNewName("");
-          setNewNumber("");
-          setNotification({
-            error: false,
-            message: `${returnedPerson.name} successfully added to phonebook`,
-          });
-          setTimeout(() => {
-            setNotification(null);
-          }, 5000);
-    });
+      .then((returnedPerson) => {
+        setPersons(persons.concat(returnedPerson));
+        setNewName("");
+        setNewNumber("");
+        setNotification({
+          error: false,
+          message: `${returnedPerson.name} successfully added to phonebook`,
+        });
+        setTimeout(() => {
+          setNotification(null);
+        }, 5000);
+      })
+      .catch((error) => {
+        setNotification({
+          error: true,
+          message: error.response.data,
+        });
+        setTimeout(() => {
+          setNotification(null);
+        }, 5000);
+        console.log("FE log", error, error.name, error.response.data);
+      });
   };
 
   const removeButton = (id) => {
