@@ -1,6 +1,7 @@
 const initialState = {
   message: 'Welcome, feel free to add a new anecdote',
-  isVisible: true
+  isVisible: true,
+  notificationID: 0
 };
 
 const reducer = (state = initialState, action) => {
@@ -9,7 +10,8 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         message: action.data.message,
-        isVisible: true
+        isVisible: true,
+        notificationID: action.data.notificationID
       };
     }
     case 'REMOVE_NOTIFICATION':
@@ -19,17 +21,31 @@ const reducer = (state = initialState, action) => {
   }
 };
 
+const notify = (message) => {
+  return {
+    type: 'NOTIFY',
+    data: { message }
+  };
+};
+
+const removeNotification = () => {
+  return {
+    type: 'REMOVE_NOTIFICATION'
+  };
+};
+
+let timeoutID;
 export const setNotification = (message, timeout) => {
-  const timer = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-  return async (dispatch) => {
-    await dispatch({
-      type: 'NOTIFY',
-      data: { message }
-    });
-    await timer(timeout);
-   return dispatch({
-      type: 'REMOVE_NOTIFICATION'
-    });
+  return (dispatch) => {
+    if (timeoutID) {
+      console.log('pre', timeoutID);
+      clearTimeout(timeoutID)
+    }
+    dispatch(notify(message));
+    timeoutID = setTimeout(() => {
+      dispatch(removeNotification());
+    }, timeout);
+    console.log('post', timeoutID);
   };
 };
 

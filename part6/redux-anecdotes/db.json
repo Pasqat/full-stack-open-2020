@@ -2,28 +2,43 @@
   "anecdotes": [
     {
       "content": "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.",
-      "votes": 8,
+      "votes": 53,
       "id": "36975"
     },
     {
       "content": "Premature optimization is the root of all evil.",
-      "votes": 8,
+      "votes": 42,
       "id": "25170"
     },
     {
       "content": "Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.",
-      "votes": 7,
+      "votes": 58,
       "id": "98312"
     },
     {
       "content": "Prova aggiunta nota asyc thunk",
-      "votes": 8,
+      "votes": 64,
       "id": "5-arNKq"
     },
     {
       "content": "puxxo",
-      "votes": 0,
+      "votes": 29,
       "id": "h93S3Pp"
+    },
+    {
+      "content": "Prova aggiunta nota asyc thunk",
+      "votes": 64,
+      "id": "Uqtle5v"
+    },
+    {
+      "content": "Use connect in place of useDispatch",
+      "votes": 20,
+      "id": "MGg4wPi"
+    },
+    {
+      "content": "Use connect in place of useDispatch la vendetta",
+      "votes": 24,
+      "id": "S_pclpk"
     }
   ]
 }

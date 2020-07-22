@@ -1,0 +1,89 @@
+const initialState = {
+  message: 'Welcome, feel free to add a new anecdote',
+  isVisible: true,
+  notificationID: 0
+};
+
+const reducer = (state = initialState, action) => {
+  switch (action.type) {
+    case 'NOTIFY': {
+      return {
+        ...state,
+        message: action.data.message,
+        isVisible: true,
+        notificationID: action.data.notificationID
+      };
+    }
+    case 'REMOVE_NOTIFICATION':
+      return { ...state, isVisible: false };
+    default:
+      return state;
+  }
+};
+
+const notify = (notificationID, message) => {
+  return {
+    type: 'NOTIFY',
+    data: { notificationID, message }
+  };
+};
+
+const removeNotification = (notificationID) => {
+  return {
+    type: 'REMOVE_NOTIFICATION',
+    data: { notificationID }
+  };
+};
+
+export const setNotification = createLogic({
+  type: 'NOTIFY',
+
+  process({getState, action}, dispatch) {
+    setTimeout(() => {
+      dispatch({ type: 'REMOVE_NOTIFICATION'}, 5000)
+    })
+  }
+})
+
+
+// let nextNotificationId = 0;
+// export const setNotification = (message, timeout) => {
+//   return async (dispatch) => {
+//     const id = nextNotificationId++;
+//     dispatch(notify(id, message));
+
+//   const timer = (ms) => 
+//     new Promise((resolve) => {
+//       (setTimeout(resolve, ms))
+//     });
+//     console.log('id to clear', id)
+//     await timer(timeout); 
+//     console.log('id to dispatch', id)
+//       dispatch(removeNotification(id));
+//   };
+// };
+
+// export const setNotification = (message, timeout) => {
+//   let timeoutID;
+//   const timer = (ms) =>
+//     new Promise((resolve) => {
+//       (timeoutID = setTimeout(resolve, ms))
+//       console.log('2',timeoutID)
+//     });
+
+//   return async (dispatch) => {
+//     await dispatch({
+//       type: 'NOTIFY',
+//       data: { message }
+//     });
+
+//     await timer(timeout); 
+//     console.log('ID', timeoutID);
+
+//     return dispatch({
+//       type: 'REMOVE_NOTIFICATION'
+//     });
+//   };
+// };
+
+export default reducer;
