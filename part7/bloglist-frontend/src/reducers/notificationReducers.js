@@ -1,13 +1,9 @@
-const notificationReducers = (state = '', action) => {
+const notificationReducers = (state = null, action) => {
   switch (action.type) {
   case 'SET_NOTIFICATION':
     return action.data
   case 'REMOVE_NOTIFICATION':
-    return {
-      ...state,
-      message: '',
-      notificationType: null
-    }
+    return null
   default:
     return state
   }
@@ -30,13 +26,15 @@ let timeoutID
 export const setNotification = (message, notificationType, timeout) => {
   return (dispatch) => {
     if (timeoutID) {
+      console.log('per', timeoutID)
       clearTimeout(timeoutID)
     }
 
     dispatch(notify(message, notificationType))
     timeoutID = setTimeout(() => {
       removeNotification()
-    }, timeout)
+    }, 5000)
+    console.log('post', timeoutID)
   }
 }
 

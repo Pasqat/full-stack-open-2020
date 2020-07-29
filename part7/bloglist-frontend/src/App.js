@@ -8,15 +8,15 @@ import NewBlog from './components/NewBlog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import storage from './utils/storage'
-import { initializeBlog } from './reducers/blogReducer'
+import { initializeBlog, addBlog, likeBlog } from './reducers/blogReducer'
 import { setNotification } from './reducers/notificationReducers'
 
 const App = () => {
   const posts = useSelector((state) => state.blogs)
-  const notification = useSelector((state) => state.notifications)
   const dispatch = useDispatch()
 
   const [blogs, setBlogs] = useState([])
+
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -50,36 +50,28 @@ const App = () => {
     }
   }
 
-  const createBlog = async (blog) => {
+  const createBlog = (blog) => {
     try {
-      const newBlog = await blogService.create(blog)
-      blogFormRef.current.toggleVisibility()
-      setBlogs(blogs.concat(newBlog))
-      dispatch(
-        setNotification(
-          `a new blog '${newBlog.title}' by ${newBlog.author} added!`,
-          'success',
-          3000
-        )
-      )
+      dispatch(addBlog(blog))
     } catch (exception) {
       console.log(exception)
     }
   }
 
   const handleLike = async (id) => {
-    const blogToLike = blogs.find((b) => b.id === id)
-    const likedBlog = {
-      ...blogToLike,
-      likes: blogToLike.likes + 1,
-      user: blogToLike.user.id
-    }
-    await blogService.update(likedBlog)
-    setBlogs(
-      blogs.map((b) =>
-        b.id === id ? { ...blogToLike, likes: blogToLike.likes + 1 } : b
-      )
-    )
+    // const blogToLike = blogs.find((b) => b.id === id)
+    // const likedBlog = {
+    // ...blogToLike,
+    // likes: blogToLike.likes + 1,
+    // user: blogToLike.user.id
+    // }
+    // await blogService.update(likedBlog)
+    // setBlogs(
+    // blogs.map((b) =>
+    // b.id === id ? { ...blogToLike, likes: blogToLike.likes + 1 } : b
+    // )
+    dispatch(likeBlog(id))
+    // )
   }
 
   const handleRemove = async (id) => {
@@ -101,9 +93,7 @@ const App = () => {
     return (
       <div>
         <h2>login to application</h2>
-
-        <Notification notification={notification} />
-
+        <Notification />
         <form onSubmit={handleLogin}>
           <div>
             username
@@ -133,7 +123,8 @@ const App = () => {
     <div>
       <h2>blogs</h2>
 
-      <Notification notification={notification} />
+      <Notification />
+      {/* <Notification notification={notification} /> */}
 
       <p>
         {user.name} logged in <button onClick={handleLogout}>logout</button>
