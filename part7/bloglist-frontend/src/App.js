@@ -5,17 +5,19 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import NewBlog from './components/NewBlog'
 
-import blogService from './services/blogs'
 import loginService from './services/login'
 import storage from './utils/storage'
-import { initializeBlog, addBlog, likeBlog } from './reducers/blogReducer'
+import {
+  initializeBlog,
+  addBlog,
+  likeBlog,
+  deleteBlog
+} from './reducers/blogReducer'
 import { setNotification } from './reducers/notificationReducers'
 
 const App = () => {
   const posts = useSelector((state) => state.blogs)
   const dispatch = useDispatch()
-
-  const [blogs, setBlogs] = useState([])
 
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
@@ -59,29 +61,16 @@ const App = () => {
   }
 
   const handleLike = async (id) => {
-    // const blogToLike = blogs.find((b) => b.id === id)
-    // const likedBlog = {
-    // ...blogToLike,
-    // likes: blogToLike.likes + 1,
-    // user: blogToLike.user.id
-    // }
-    // await blogService.update(likedBlog)
-    // setBlogs(
-    // blogs.map((b) =>
-    // b.id === id ? { ...blogToLike, likes: blogToLike.likes + 1 } : b
-    // )
     dispatch(likeBlog(id))
-    // )
   }
 
   const handleRemove = async (id) => {
-    const blogToRemove = blogs.find((b) => b.id === id)
+    const blogToRemove = posts.find((b) => b.id === id)
     const ok = window.confirm(
       `Remove blog ${blogToRemove.title} by ${blogToRemove.author}`
     )
     if (ok) {
-      await blogService.remove(id)
-      setBlogs(blogs.filter((b) => b.id !== id))
+      dispatch(deleteBlog(id))
     }
   }
 
