@@ -38,14 +38,12 @@ let timeoutID;
 export const setNotification = (message, timeout) => {
   return (dispatch) => {
     if (timeoutID) {
-      console.log('pre', timeoutID);
-      clearTimeout(timeoutID)
+      clearTimeout(timeoutID);
     }
     dispatch(notify(message));
     timeoutID = setTimeout(() => {
       dispatch(removeNotification());
     }, timeout);
-    console.log('post', timeoutID);
   };
 };
 
