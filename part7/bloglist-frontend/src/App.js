@@ -5,7 +5,6 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import NewBlog from './components/NewBlog'
 
-import loginService from './services/login'
 import storage from './utils/storage'
 import {
   initializeBlog,
@@ -14,12 +13,13 @@ import {
   deleteBlog
 } from './reducers/blogReducer'
 import { setNotification } from './reducers/notificationReducers'
+import { userLogin, setUser } from './reducers/loginReducers'
 
 const App = () => {
   const posts = useSelector((state) => state.blogs)
+  const user = useSelector((state) => state.user)
   const dispatch = useDispatch()
 
-  const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -31,20 +31,16 @@ const App = () => {
 
   useEffect(() => {
     const user = storage.loadUser()
-    setUser(user)
-  }, [])
+    dispatch(setUser(user))
+  }, [dispatch])
 
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
-      const user = await loginService.login({
-        username,
-        password
-      })
-
       setUsername('')
       setPassword('')
-      setUser(user)
+
+      dispatch(userLogin(username, password))
       dispatch(setNotification(`${user.name} welcome back!`, 'success', 5000))
       storage.saveUser(user)
     } catch (exception) {
@@ -75,7 +71,7 @@ const App = () => {
   }
 
   const handleLogout = () => {
-    setUser(null)
+    dispatch(userLogin(null))
     storage.logoutUser()
   }
   if (!user) {
