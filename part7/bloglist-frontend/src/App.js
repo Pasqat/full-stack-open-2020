@@ -30,19 +30,21 @@ const App = () => {
   }, [dispatch])
 
   useEffect(() => {
-    const user = storage.loadUser()
-    dispatch(setUser(user))
+    const storedUser = storage.loadUser()
+    console.log('useEffect', storedUser)
+    dispatch(setUser(storedUser))
   }, [dispatch])
 
+  // TODO dispatch is async so user is null. Fix the problem!
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
+      dispatch(userLogin(username, password))
       setUsername('')
       setPassword('')
 
-      dispatch(userLogin(username, password))
-      dispatch(setNotification(`${user.name} welcome back!`, 'success', 5000))
-      storage.saveUser(user)
+      // dispatch(setNotification(`${user.name} welcome back!`, 'success', 5000))
+      // storage.saveUser(user)
     } catch (exception) {
       dispatch(setNotification('wrong username or password', 'error', 5000))
     }
@@ -71,7 +73,7 @@ const App = () => {
   }
 
   const handleLogout = () => {
-    dispatch(userLogin(null))
+    dispatch(setUser(null))
     storage.logoutUser()
   }
   if (!user) {
@@ -109,7 +111,6 @@ const App = () => {
       <h2>blogs</h2>
 
       <Notification />
-      {/* <Notification notification={notification} /> */}
 
       <p>
         {user.name} logged in <button onClick={handleLogout}>logout</button>
