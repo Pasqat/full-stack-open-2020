@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { Switch, Route, Link } from 'react-router-dom'
+
 import Blog from './components/Blog'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import NewBlog from './components/NewBlog'
+
+import Users from './components/Users'
 
 import storage from './utils/storage'
 import {
@@ -115,20 +119,26 @@ const App = () => {
       <p>
         {user.name} logged in <button onClick={handleLogout}>logout</button>
       </p>
+      <Switch>
+        <Route path="/users">
+          <Users />
+        </Route>
+        <Route path="/">
+          <Togglable buttonLabel="create new blog" ref={blogFormRef}>
+            <NewBlog createBlog={createBlog} />
+          </Togglable>
 
-      <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-        <NewBlog createBlog={createBlog} />
-      </Togglable>
-
-      {posts.sort(byLikes).map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          handleLike={handleLike}
-          handleRemove={handleRemove}
-          own={user.username === blog.user.username}
-        />
-      ))}
+          {posts.sort(byLikes).map((blog) => (
+            <Blog
+              key={blog.id}
+              blog={blog}
+              handleLike={handleLike}
+              handleRemove={handleRemove}
+              own={user.username === blog.user.username}
+            />
+          ))}
+        </Route>
+      </Switch>
     </div>
   )
 }
