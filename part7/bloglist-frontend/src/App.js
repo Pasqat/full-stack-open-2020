@@ -118,16 +118,27 @@ const App = () => {
   }
 
   const byLikes = (b1, b2) => b2.likes - b1.likes
-
+  const padding = {
+    padding: 5
+  }
   return (
     <div>
+      <div style={{ display: 'flex', padding: 10, background: 'lightgray' }}>
+        <Link style={padding} to="/blogs">
+          blogs
+        </Link>
+        <Link style={padding} to="/users">
+          users
+        </Link>
+        <div style={padding}>
+          {user.name} logged in <button onClick={handleLogout}>logout</button>
+        </div>
+      </div>
       <h2>blogs</h2>
 
       <Notification />
 
-      <p>
-        {user.name} logged in <button onClick={handleLogout}>logout</button>
-      </p>
+      <p></p>
       <Switch>
         <Route path="/users/:id">
           <UserDetails userDetails={userDetails} />
