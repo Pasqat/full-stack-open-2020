@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Switch, Route, Link } from 'react-router-dom'
+import { Switch, Route, Link, useRouteMatch } from 'react-router-dom'
 
 import Blog from './components/Blog'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import NewBlog from './components/NewBlog'
-
+import UserDetails from './components/UserDetails'
 import Users from './components/Users'
 
 import storage from './utils/storage'
@@ -16,12 +16,14 @@ import {
   likeBlog,
   deleteBlog
 } from './reducers/blogReducer'
+import { initializeUsers } from './reducers/usersReducers'
 import { setNotification } from './reducers/notificationReducers'
 import { userLogin, setUser } from './reducers/loginReducers'
 
 const App = () => {
   const posts = useSelector((state) => state.blogs)
   const user = useSelector((state) => state.user)
+  const users = useSelector((state) => state.users)
   const dispatch = useDispatch()
 
   const [username, setUsername] = useState('')
@@ -31,24 +33,28 @@ const App = () => {
 
   useEffect(() => {
     dispatch(initializeBlog())
+    dispatch(initializeUsers())
   }, [dispatch])
 
   useEffect(() => {
     const storedUser = storage.loadUser()
-    console.log('useEffect', storedUser)
     dispatch(setUser(storedUser))
   }, [dispatch])
 
-  // TODO dispatch is async so user is null. Fix the problem!
+  const userMatch = useRouteMatch('/users/:id')
+  const userDetails = userMatch
+    ? users.find((user) => {
+      console.log('finding...', user.id, userMatch.params.id)
+      return user.id === userMatch.params.id
+    })
+    : null
+
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
       dispatch(userLogin(username, password))
       setUsername('')
       setPassword('')
-
-      // dispatch(setNotification(`${user.name} welcome back!`, 'success', 5000))
-      // storage.saveUser(user)
     } catch (exception) {
       dispatch(setNotification('wrong username or password', 'error', 5000))
     }
@@ -120,8 +126,11 @@ const App = () => {
         {user.name} logged in <button onClick={handleLogout}>logout</button>
       </p>
       <Switch>
+        <Route path="/users/:id">
+          <UserDetails userDetails={userDetails} />
+        </Route>
         <Route path="/users">
-          <Users />
+          <Users users={users} />
         </Route>
         <Route path="/">
           <Togglable buttonLabel="create new blog" ref={blogFormRef}>
