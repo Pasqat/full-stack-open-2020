@@ -11,6 +11,10 @@ const blogReducer = (state = [], action) => {
     const id = action.data.id
     return state.map((blog) => (blog.id !== id ? blog : action.data))
   }
+  case 'COMMENT_BLOG': {
+    const id = action.data.id
+    return state.map((blog) => (blog.id !== id ? blog : action.data))
+  }
   case 'DELETE_BLOG': {
     const id = action.data.id
     console.log(action.data)
@@ -48,17 +52,34 @@ export const addBlog = (blog) => {
   }
 }
 
-export const likeBlog = (id) => {
-  return async (dispatch, getState) => {
-    const blogToLike = getState().blogs.find((b) => b.id === id)
+export const likeBlog = (blog) => {
+  return async (dispatch) => {
     const likedBlog = {
-      ...blogToLike,
-      likes: blogToLike.likes + 1,
-      user: { ...blogToLike.user }
+      ...blog,
+      likes: blog.likes + 1
     }
+    await blogService.update(likedBlog)
     dispatch({
       type: 'LIKE_BLOG',
       data: likedBlog
+    })
+  }
+}
+
+export const commentBlog = (blog, comment) => {
+  const commentToAdd = {
+    body: comment,
+    date: new Date()
+  }
+  return async (dispatch) => {
+    const commentedBlog = {
+      ...blog,
+      comments: [...blog.comments, commentToAdd]
+    }
+    const response = await blogService.update(commentedBlog)
+    dispatch({
+      type: 'COMMENT_BLOG',
+      data: response
     })
   }
 }
