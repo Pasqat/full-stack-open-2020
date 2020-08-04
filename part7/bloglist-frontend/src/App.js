@@ -8,6 +8,7 @@ import Togglable from './components/Togglable'
 import NewBlog from './components/NewBlog'
 import UserDetails from './components/UserDetails'
 import Users from './components/Users'
+import BlogDetails from './components/BlogDetails'
 
 import storage from './utils/storage'
 import {
@@ -21,7 +22,7 @@ import { setNotification } from './reducers/notificationReducers'
 import { userLogin, setUser } from './reducers/loginReducers'
 
 const App = () => {
-  const posts = useSelector((state) => state.blogs)
+  const blogs = useSelector((state) => state.blogs)
   const user = useSelector((state) => state.user)
   const users = useSelector((state) => state.users)
   const dispatch = useDispatch()
@@ -43,10 +44,12 @@ const App = () => {
 
   const userMatch = useRouteMatch('/users/:id')
   const userDetails = userMatch
-    ? users.find((user) => {
-      console.log('finding...', user.id, userMatch.params.id)
-      return user.id === userMatch.params.id
-    })
+    ? users.find((user) => user.id === userMatch.params.id)
+    : null
+
+  const blogMatch = useRouteMatch('/blogs/:id')
+  const blogDetails = blogMatch
+    ? blogs.find((blog) => blog.id === blogMatch.params.id)
     : null
 
   const handleLogin = async (event) => {
@@ -73,7 +76,7 @@ const App = () => {
   }
 
   const handleRemove = async (id) => {
-    const blogToRemove = posts.find((b) => b.id === id)
+    const blogToRemove = blogs.find((b) => b.id === id)
     const ok = window.confirm(
       `Remove blog ${blogToRemove.title} by ${blogToRemove.author}`
     )
@@ -132,19 +135,21 @@ const App = () => {
         <Route path="/users">
           <Users users={users} />
         </Route>
+        <Route path="/blogs/:id">
+          <BlogDetails
+            blogDetails={blogDetails}
+            handleLike={handleLike}
+            handleRemove={handleRemove}
+            user={user}
+          />
+        </Route>
         <Route path="/">
           <Togglable buttonLabel="create new blog" ref={blogFormRef}>
             <NewBlog createBlog={createBlog} />
           </Togglable>
 
-          {posts.sort(byLikes).map((blog) => (
-            <Blog
-              key={blog.id}
-              blog={blog}
-              handleLike={handleLike}
-              handleRemove={handleRemove}
-              own={user.username === blog.user.username}
-            />
+          {blogs.sort(byLikes).map((blog) => (
+            <Blog key={blog.id} blog={blog} />
           ))}
         </Route>
       </Switch>
