@@ -1,22 +1,23 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
+import { Link as routerLink } from 'react-router-dom'
+import { Text, Box, Link } from '@chakra-ui/core'
 
 const Blog = ({ blog }) => {
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
-  }
-
   return (
-    <div style={blogStyle} className="blog">
-      <div>
-        <Link to={`/blogs/${blog.id}`}>{blog.title}</Link> by {blog.author}{' '}
-      </div>
-    </div>
+    <Box p={5} mt={2} mr={5} ml={5} shadow="md" borderWidth="1px">
+      <Text>
+        <Link
+          as={routerLink}
+          to={`/blogs/${blog.id}`}
+          color="green.500"
+          textDecoration="underline"
+        >
+          {blog.title}
+        </Link>{' '}
+        by {blog.author}{' '}
+      </Text>
+    </Box>
   )
 }
 

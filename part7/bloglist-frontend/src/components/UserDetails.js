@@ -1,4 +1,5 @@
 import React from 'react'
+import { Stack, Text, Box, Heading } from '@chakra-ui/core'
 
 const UserDetails = ({ userDetails }) => {
   console.log(userDetails)
@@ -6,17 +7,19 @@ const UserDetails = ({ userDetails }) => {
     return null
   }
   return (
-    <div>
-      <h1>{userDetails.name}</h1>
-      <h2>added blogs</h2>
-      <ul>
+    <Box m={5} p={5}>
+      <Heading>{userDetails.name}</Heading>
+      <Heading as="h3" size="lg">
+        added blogs
+      </Heading>
+      <Stack spacing={2} mt={5}>
         {userDetails.blogs.map((blog) => (
-          <li key={blog.id}>
-            {blog.title}, <strong>{blog.likes} likes</strong>
-          </li>
+          <Box p={5} key={blog.id} mt={2} shadow="md" borderWidth="1px">
+            {blog.title}, <Text as="mark">{blog.likes} likes</Text>
+          </Box>
         ))}
-      </ul>
-    </div>
+      </Stack>
+    </Box>
   )
 }
 

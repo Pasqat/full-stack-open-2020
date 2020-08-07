@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { FormLabel, Input, Button, Box, Heading } from '@chakra-ui/core'
 
 const NewBlog = (props) => {
   const [title, setTitle] = useState('')
@@ -9,7 +10,9 @@ const NewBlog = (props) => {
     event.preventDefault()
 
     props.createBlog({
-      title, author, url
+      title,
+      author,
+      url
     })
 
     setTitle('')
@@ -18,36 +21,43 @@ const NewBlog = (props) => {
   }
 
   return (
-    <div>
-      <h2>create new</h2>
+    <Box mb={5}>
+      <Heading as="h3" pb={10}>
+        Create new:
+      </Heading>
       <form onSubmit={handleNewBlog}>
-        <div>
-          author
-          <input
-            id='author'
-            value={author}
-            onChange={({ target }) => setAuthor(target.value)}
-          />
-        </div>
-        <div>
-          title
-          <input
-            id='title'
-            value={title}
-            onChange={({ target }) => setTitle(target.value)}
-          />
-        </div>
-        <div>
-          url
-          <input
-            id='url'
-            value={url}
-            onChange={({ target }) => setUrl(target.value)}
-          />
-        </div>
-        <button id="create">create</button>
+        <FormLabel htmlFor="author">Author</FormLabel>
+        <Input
+          id="author"
+          value={author}
+          onChange={({ target }) => setAuthor(target.value)}
+          variant="flushed"
+          size="sm"
+          mb={2}
+        />
+        <FormLabel htmlFor="title">Title</FormLabel>
+        <Input
+          id="title"
+          value={title}
+          onChange={({ target }) => setTitle(target.value)}
+          variant="flushed"
+          size="sm"
+          mb={2}
+        />
+        <FormLabel>url</FormLabel>
+        <Input
+          id="url"
+          value={url}
+          onChange={({ target }) => setUrl(target.value)}
+          variant="flushed"
+          size="sm"
+          mb={2}
+        />
+        <Button rightIcon="check" variantColor="teal" id="create">
+          create
+        </Button>
       </form>
-    </div>
+    </Box>
   )
 }
 

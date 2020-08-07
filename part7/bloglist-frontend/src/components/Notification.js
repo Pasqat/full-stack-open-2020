@@ -1,5 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { Alert, AlertIcon } from '@chakra-ui/core'
 
 const Notification = () => {
   const notification = useSelector((state) => state.notifications)
@@ -7,15 +8,12 @@ const Notification = () => {
     return null
   }
 
-  const style = {
-    borderStyle: 'solid',
-    borderRadius: 5,
-    padding: 10,
-    color: notification.notificationType === 'success' ? 'green' : 'red',
-    background: 'lightgrey'
-  }
-
-  return <div style={style}>{notification.message}</div>
+  return (
+    <Alert status={notification.notificationType}>
+      <AlertIcon />
+      {notification.message}
+    </Alert>
+  )
 }
 
 export default Notification

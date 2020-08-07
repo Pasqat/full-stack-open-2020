@@ -22,7 +22,6 @@ export const userLogin = (username, password) => {
       type: 'LOGIN',
       data: user
     })
-    console.log(user)
     storage.saveUser(user)
     dispatch(setNotification(`${user.name} welcome back!`, 'success', 5000))
   }

@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Switch, Route, Link, useRouteMatch } from 'react-router-dom'
+import { Switch, Route, useRouteMatch } from 'react-router-dom'
+import {
+  Heading,
+  Box,
+  FormControl,
+  FormLabel,
+  Input,
+  Button,
+  Stack
+} from '@chakra-ui/core'
 
 import Blog from './components/Blog'
 import Notification from './components/Notification'
@@ -9,6 +18,7 @@ import NewBlog from './components/NewBlog'
 import UserDetails from './components/UserDetails'
 import Users from './components/Users'
 import BlogDetails from './components/BlogDetails'
+import Header from './components/Header'
 
 import storage from './utils/storage'
 import {
@@ -91,54 +101,48 @@ const App = () => {
   }
   if (!user) {
     return (
-      <div>
-        <h2>login to application</h2>
+      <Box
+        p={4}
+        maxW="sm"
+        alignSelf="center"
+        borderWidth="1px"
+        rounded="lg"
+        m={10}
+      >
+        <Heading>login to application</Heading>
         <Notification />
         <form onSubmit={handleLogin}>
-          <div>
-            username
-            <input
+          <FormControl isInvalid={Notification}>
+            <FormLabel htmlFor="name">username</FormLabel>
+            <Input
               id="username"
               value={username}
               onChange={({ target }) => setUsername(target.value)}
+              placeholder="username"
+              focusBorderColor="lime"
             />
-          </div>
-          <div>
-            password
-            <input
+            <FormLabel htmlFor="password">password</FormLabel>
+            <Input
               id="password"
               value={password}
               onChange={({ target }) => setPassword(target.value)}
+              placeholder="password"
+              type="password"
             />
-          </div>
-          <button id="login">login</button>
+            <Button id="login" mt={4} variantColor="teal" type="submit">
+              login
+            </Button>
+          </FormControl>
         </form>
-      </div>
+      </Box>
     )
   }
 
   const byLikes = (b1, b2) => b2.likes - b1.likes
-  const padding = {
-    padding: 5
-  }
   return (
-    <div>
-      <div style={{ display: 'flex', padding: 10, background: 'lightgray' }}>
-        <Link style={padding} to="/blogs">
-          blogs
-        </Link>
-        <Link style={padding} to="/users">
-          users
-        </Link>
-        <div style={padding}>
-          {user.name} logged in <button onClick={handleLogout}>logout</button>
-        </div>
-      </div>
-      <h2>blogs</h2>
-
+    <Box>
+      <Header user={user} handleLogout={handleLogout} />
       <Notification />
-
-      <p></p>
       <Switch>
         <Route path="/users/:id">
           <UserDetails userDetails={userDetails} />
@@ -155,16 +159,17 @@ const App = () => {
           />
         </Route>
         <Route path="/">
-          <Togglable buttonLabel="create new blog" ref={blogFormRef}>
+          <Togglable buttonLabel="Add new Blog" ref={blogFormRef}>
             <NewBlog createBlog={createBlog} />
           </Togglable>
-
-          {blogs.sort(byLikes).map((blog) => (
-            <Blog key={blog.id} blog={blog} />
-          ))}
+          <Stack m={2} spacing={8}>
+            {blogs.sort(byLikes).map((blog) => (
+              <Blog key={blog.id} blog={blog} />
+            ))}
+          </Stack>
         </Route>
       </Switch>
-    </div>
+    </Box>
   )
 }
 
