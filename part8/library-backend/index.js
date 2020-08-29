@@ -1,4 +1,4 @@
-const { ApolloServer, gql } = require('apollo-server');
+const { ApolloServer, UserInputError, gql } = require('apollo-server');
 const { v1: uuid } = require('uuid');
 
 const mongoose = require('mongoose');
@@ -17,7 +17,7 @@ mongoose
     useCreateIndex: true
   })
   .then(() => {
-    console.log('🌕️ connected to MongoDB');
+    console.log('🦸 connected to MongoDB');
   })
   .catch((error) => console.log('error connecting to MongoDB:', error.message));
 
@@ -88,6 +88,7 @@ const resolvers = {
       return bookByAuthor.length;
     }
   },
+  // TODO part8.15 userInputError Validation
   Mutation: {
     addBook: async (root, args) => {
       let author = {};
