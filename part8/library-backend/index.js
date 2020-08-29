@@ -88,12 +88,14 @@ const resolvers = {
       return bookByAuthor.length;
     }
   },
-  // TODO part8.15 userInputError Validation
+
   Mutation: {
     addBook: async (root, args) => {
       let author = {};
-      const checkAuthor = await Author.findOne({
-        name: args.author
+      const checkAuthor = await Author.find({
+        name: {
+          $in: [args.author]
+        }
       });
 
       if (!checkAuthor[0]) {
@@ -101,14 +103,22 @@ const resolvers = {
       } else {
         author = checkAuthor[0];
       }
-      author.save();
 
       const newBook = {
         ...args,
         author: author._id
       };
+
       const book = new Book(newBook);
-      book.save();
+
+      try {
+        await author.save();
+        await book.save();
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args
+        });
+      }
       return book;
     },
 
@@ -116,11 +126,18 @@ const resolvers = {
       const author = await Author.findOne({ name: args.name });
 
       if (!author) {
-        return null;
+        throw new UserInputError("Author doesn't exist");
       }
 
       author.born = args.setBornTo;
-      author.save();
+
+      try {
+        await author.save();
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args
+        });
+      }
 
       return author;
     }
