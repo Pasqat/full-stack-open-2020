@@ -1,14 +1,17 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 
 import {useQuery} from '@apollo/client'
-import {ALL_BOOKS} from '../queries'
-import {genresList} from '../utils/handlers'
+import {ALL_BOOKS, LOGGEDIN_USER} from '../queries'
 
-const Books = (props) => {
-
+const Recommended = (props) => {
   const [genre, setGenre] = useState(null)
-
   const result = useQuery(ALL_BOOKS)
+
+  useEffect(() => {
+    if (props.user) {
+      setGenre(props.user.me.favoriteGenres)
+    }
+  }, [props.user])
 
   if (!props.show) {
     return null
@@ -25,7 +28,7 @@ const Books = (props) => {
   return (
     <div>
       <h2>books</h2>
-      {!genre ? '' : <p>in genre <strong>{genre}</strong></p>}
+      {!genre ? '' : <p>books in your favorite genre <strong>{genre}</strong></p>}
       <table>
         <tbody>
           <tr>
@@ -46,10 +49,7 @@ const Books = (props) => {
           )}
         </tbody>
       </table>
-      {genresList(result.data.allBooks).map(g => <button key={g} onClick={() => setGenre(g)}>{g}</button>)}
-      <button onClick={() => setGenre(null)}>all genre</button>
     </div>
   )
 }
-
-export default Books
+export default Recommended

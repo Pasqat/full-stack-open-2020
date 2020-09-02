@@ -101,8 +101,8 @@ const resolvers = {
       return Book.find({}).populate('author');
     },
     allAuthors: () => Author.find({}),
-    me: (root, args, context) => {
-      return context.currentUser
+    me: async (root, args, context) => {
+      return await context.currentUser
     }
   },
   Author: {
