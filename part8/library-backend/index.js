@@ -98,6 +98,14 @@ const resolvers = {
       //     book.genres.includes(args.genre)
       //   );
       // }
+      if (!args.author && args.genre) {
+        return Book.find({genres: args.genre}).populate('author');
+      } else if (!args.genre && args.author) {
+        return Book.find({author: args.author}).populate('author');
+      } else if (args.author && args.genre) {
+        console.log('marameo')
+        return Book.find({genres: args.genre, author: args.author}).populate('author');
+      }
       return Book.find({}).populate('author');
     },
     allAuthors: () => Author.find({}),
