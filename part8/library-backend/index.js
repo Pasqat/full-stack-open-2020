@@ -85,19 +85,6 @@ const resolvers = {
     bookCount: () => Book.collection.countDocuments(),
     authorCount: () => Author.collection.countDocuments(),
     allBooks: (root, args) => {
-      // TODO filtri rifattorizzati per MongoDb
-      // if (!args.author && args.genre) {
-      //   return books.filter((book) => book.genres.includes(args.genre));
-      // } else if (!args.genre && args.author) {
-      //   return books.filter((book) => book.author === args.author);
-      // } else if (args.author && args.genre) {
-      //   const authorFiltered = books.filter(
-      //     (book) => book.author === args.author
-      //   );
-      //   return authorFiltered.filter((book) =>
-      //     book.genres.includes(args.genre)
-      //   );
-      // }
       if (!args.author && args.genre) {
         return Book.find({genres: args.genre}).populate('author');
       } else if (!args.genre && args.author) {
@@ -151,8 +138,7 @@ const resolvers = {
         author: author._id
       };
 
-      const book = new Book(newBook);
-
+      let book = new Book(newBook).populate('author');
       try {
         await author.save();
         await book.save();
@@ -161,7 +147,7 @@ const resolvers = {
           invalidArgs: args
         });
       }
-      return book;
+      return book
     },
 
     editAuthor: async (root, args, {currentUser}) => {
