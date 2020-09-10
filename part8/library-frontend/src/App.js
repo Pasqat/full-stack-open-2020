@@ -5,14 +5,21 @@ import NewBook from "./components/NewBook";
 import LoginForm from "./components/LoginForm";
 import Recommended from "./components/Recommended";
 
-import {useQuery} from "@apollo/client";
-import {LOGGEDIN_USER} from "./queries";
+import {useQuery, useSubscription} from "@apollo/client";
+import {LOGGEDIN_USER, BOOK_ADDED} from "./queries";
 
 const App = () => {
     const [page, setPage] = useState("authors");
     const [token, setToken] = useState(null);
 
     const result = useQuery(LOGGEDIN_USER);
+
+    useSubscription(BOOK_ADDED, {
+        onSubscriptionData: ({subscriptionData}) => {
+            window.alert(`${subscriptionData.data.bookAdded.title} added`)
+            console.log(subscriptionData.data)
+        }
+    })
 
     useEffect(() => {
         const token = localStorage.getItem("library-token");
