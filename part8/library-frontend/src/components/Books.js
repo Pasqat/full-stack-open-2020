@@ -15,11 +15,14 @@ const Books = (props) => {
     if (result.data) {
       setGenres(result.data.allBooks)
     }
-  }, [result.data])
+    if (!genre) {
+      showByGenre('')
+    }
+  }, [result.data, genre])
 
-  const showByGenre = (genre) => {
-    getBook({variables: {genre}})
-    setGenre(genre)
+  const showByGenre = (genreToShow) => {
+    getBook({variables: {genreToShow}})
+    setGenre(genreToShow)
   }
 
   if (!props.show) {
@@ -36,16 +39,6 @@ const Books = (props) => {
         {genresList(data.allBooks).map(g => <button key={g}
           onClick={() => showByGenre(g)}>{g}</button>)}
         <button onClick={() => showByGenre('')}>all genres</button>
-      </div>
-    )
-  }
-
-  if (!genres) {
-    return (
-      <div>
-        <h2>books</h2>
-        <p>select a genres to see the related books</p>
-        {genresButtons()}
       </div>
     )
   }
