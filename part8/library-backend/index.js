@@ -11,7 +11,7 @@ const User = require('./models/user');
 require('dotenv').config();
 
 mongoose.set('useFindAndModify', false);
-
+mongoose.set('debug', true)
 console.log('conneting to', process.env.MONGODB_URI);
 
 mongoose
@@ -232,6 +232,9 @@ const server = new ApolloServer({
       const currentUser = await User.findById(decodedToken.id)
       return {currentUser}
     }
+    //log the queries made to find out n+1 problem
+    // console.log('query',req.body.query)
+    // console.log('variables', req.boby.variables)
   }
 });
 

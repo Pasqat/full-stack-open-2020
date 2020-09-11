@@ -18,7 +18,7 @@ const Books = (props) => {
     if (!genre) {
       showByGenre('')
     }
-  }, [result.data, genre])
+  }, [result.data, genre]) // eslint-disable-line
 
   const showByGenre = (genreToShow) => {
     getBook({variables: {genreToShow}})
