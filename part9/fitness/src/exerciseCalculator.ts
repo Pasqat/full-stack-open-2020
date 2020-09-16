@@ -1,3 +1,8 @@
+interface MultiplyValues2 {
+    targetValue: number,
+    values: Array<any>
+}
+
 interface Result {
     periodLength: number,
     trainingDays: number,
@@ -6,6 +11,22 @@ interface Result {
     ratingDescription: string,
     target: number,
     average: number
+}
+
+
+const parser = (arg: string[]): MultiplyValues2 => {
+    if (arg.length < 4) throw new Error('Not enough arguments');
+    arg.shift();
+    arg.shift();
+
+    if (arg.every(a => !isNaN(Number(a)))) {
+        const values = arg.map(a => Number(a));
+        values.shift();
+        const newObject = {targetValue: Number(arg[0]), values};
+        return newObject;
+    } else {
+        throw new Error('Provided value were not numbers')
+    }
 }
 
 function nonZero(arr: Array<number>): number {
@@ -47,7 +68,8 @@ function ratingDesc(rating: number): string {
     }
 }
 
-const calculateExercises = function (exercises: Array<number>, targetDailyHours: number): Result {
+const calculateExercises = function (targetDailyHours: number, exercises: Array<number>): Result {
+
     const periodLength = exercises.length;
     const trainingDays = nonZero(exercises);
     const success = checkTarget(exercises, targetDailyHours);
@@ -69,5 +91,9 @@ const calculateExercises = function (exercises: Array<number>, targetDailyHours:
     return result
 }
 
-calculateExercises([0, 2, 9, 3, 0, 0, 1], 2)
-calculateExercises([4, 2, 9, 3, 3, 5, 2], 2)
+try {
+    const {targetValue, values} = parser(process.argv)
+    calculateExercises(targetValue, values)
+} catch (e) {
+    console.log('Error, message: ' + e.message)
+}
