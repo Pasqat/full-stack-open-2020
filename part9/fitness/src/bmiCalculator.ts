@@ -16,3 +16,5 @@ function calculateBMI(height: number, weight: number): string {
   }
 }
 console.log(calculateBMI(180, 74))
+
+

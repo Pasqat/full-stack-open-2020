@@ -1,0 +1,30 @@
+interface Result {
+    periodLength: number,
+    trainingDays: number,
+    // success: boolean,
+    // rating: number,
+    // ratingDescription: string,
+    // target: number,
+    // average: number
+}
+
+
+const calculateExercises = function (exercises: Array<number>): Result {
+    const periodLength = exercises.length;
+    const trainingDays = () => {
+        let count = 0;
+        for (let i = 0; i < periodLength; i++) {
+            periodLength[i] !== 0 ? count++ : count
+        }
+        return count
+    }
+    console.log('periodLength', periodLength, 'trainingDays', trainingDays)
+
+    return {
+        periodLength,
+        trainingDays
+    }
+}
+
+
+calculateExercises([0, 2, 9, 3, 0, 0, 1])
