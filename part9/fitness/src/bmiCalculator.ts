@@ -2,7 +2,6 @@ interface MultiplyValues {
   value1: number,
   value2: number
 }
-
 const parseArguments = (args: string[]): MultiplyValues=> {
   if (args.length !== 4) throw new Error('Accepted only 2 arguments');
 
@@ -15,8 +14,6 @@ const parseArguments = (args: string[]): MultiplyValues=> {
     throw new Error('Provided value were not numbers')
   }
 }
-
-
 
 function calculateBMI(height: number, weight: number): string {
   const BMI: number = weight / ((height / 100) ** 2);
