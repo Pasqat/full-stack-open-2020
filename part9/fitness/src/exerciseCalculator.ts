@@ -79,7 +79,7 @@ function ratingDesc(rating: number): string {
     return desc;
 }
 
-const calculateExercises = function (
+export const calculateExercises = function (
     targetDailyHours: number,
     exercises: Array<number>
 ): Result {
