@@ -13,7 +13,7 @@ const PORT = 3001;
 
 app.get('/api/ping', (_req, res) => {
     console.log('someone pinged here');
-    res.json({'pong':"pong"});
+    res.json({'pong': "pong"});
 });
 
 app.use('/api/diagnoses', diagnosesRouter);
