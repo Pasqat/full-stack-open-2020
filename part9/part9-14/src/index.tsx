@@ -1,35 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import Header from './Header';
+import Content from './Content';
+import Total from './Total';
 
-interface CourseParts {
-  name: string;
-  exerciseCount: number;
-}
-
-const Header: React.FC<{ courseName: string }> = ({ courseName }) => {
-  return <h1>{courseName}</h1>;
-};
-
-const Content: React.FC<{ courseParts: Array<CourseParts> }> = ({
-  courseParts,
-}) => (
-    <>
-      {courseParts.map((p: CourseParts) => (
-        <p key={p.name}>
-          {p.name} {p.exerciseCount}
-        </p>
-      ))}
-    </>
-  );
-
-const Total: React.FC<{ courseParts: CourseParts[]}> = ({ courseParts }) => (
-  <>
-    <p>
-      Number of exercises{" "}
-    </p>
-    {courseParts.reduce((carry: number, part) => carry + part.exerciseCount, 0)}
-  </>
-)
+import { CourseParts } from '../types';
 
 const App: React.FC = () => {
   const courseName = "Half Stack application development";
