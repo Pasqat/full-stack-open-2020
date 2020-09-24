@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NewPatientsEntry, Gender } from "./types";
@@ -9,6 +10,7 @@ const toNewPatientEntry = (object: any): NewPatientsEntry => {
     dateOfBirth: parseDateOfBirth(object.dateOfBirth),
     gender: parseGender(object.gender),
     occupation: parseOccupation(object.occupation),
+    entries: parseEntries(object.entries)
   };
 
 };
@@ -54,6 +56,15 @@ const parseOccupation = (occupation: any): string => {
   return occupation;
 };
 
+const parseEntries = (entries: any): string[] => {
+  if (!entries || !isArray(entries)) {
+    throw new Error("Incorrect or missing entries: " + entries);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return entries;
+};
+
 /* ================== VALIDATOR ===================== */
 const isString = (text: any): text is string => {
   return typeof text === "string" || text instanceof String;
@@ -65,6 +76,10 @@ const isDate = (date: string): boolean => {
 
 const isGender = (param: any): param is Gender => {
   return Object.values(Gender).includes(param);
+};
+
+const isArray = (array: any[]): array is string[] => {
+  return array instanceof Array;
 };
 
 export default toNewPatientEntry;
