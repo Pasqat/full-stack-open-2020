@@ -1,4 +1,4 @@
-export interface Diagnose {
+export interface Diagnosis {
   code: string;
   name: string;
   latin?: string;
@@ -28,7 +28,7 @@ interface BaseEntry {
   date: string;
   specialist: string;
   description: string;
-  diagnosisCodes?: Array<Diagnose["code"]>;
+  diagnosisCodes?: Array<Diagnosis["code"]>;
 }
 
 export enum HealthCheckRating {

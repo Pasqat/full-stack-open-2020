@@ -3,7 +3,7 @@ import {useParams} from "react-router-dom";
 import axios from "axios";
 import {Container, Icon, Placeholder, List} from "semantic-ui-react";
 
-import {PatientDetails, Entry} from "../types";
+import {PatientDetails, Entry, Diagnosis} from "../types";
 import {apiBaseUrl} from "../constants";
 import {useStateValue, setPatient} from "../state";
 
@@ -11,14 +11,12 @@ const PatientPage: React.FC = () => {
     const {id} = useParams<{id: string}>();
     const [{patient}, dispatch] = useStateValue();
 
-    console.log("patient", patient);
-
     React.useEffect(() => {
         if (patient?.id && patient?.id === id) {
             return;
         }
         const fetchPatient = async () => {
-            console.log("fetching");
+            console.log("fetching patient");
             try {
                 const {data: patientFromApi} = await axios.get<PatientDetails>(
                     `${apiBaseUrl}/patients/${id}`
@@ -29,7 +27,7 @@ const PatientPage: React.FC = () => {
             }
         };
         fetchPatient();
-    }, [id, dispatch]);
+    }, [id, dispatch, patient]);
 
     if (!patient) {
         return (
@@ -67,20 +65,28 @@ const PatientPage: React.FC = () => {
 };
 
 const Notes: React.FC<{entries: Entry[] | undefined}> = ({entries}) => {
+    const [{diagnosis}] = useStateValue();
+
     return (
         <Container>
             <h3>Notes:</h3>
             {entries?.map((e) => {
                 return (
-                    <div>
+                    <div key={e.date}>
                         <p>
                             {e.date}{" "}
                             <span style={{fontStyle: "italic"}}>{e.description}</span>
                         </p>
                         <ul>
-                            {e.diagnosisCodes?.map((d) => (
-                                <li key={d}>{d}</li>
-                            ))}
+                            {e.diagnosisCodes?.map((d: Diagnosis["code"]) => {
+                                Object.values(diagnosis).map((diagnose: Diagnosis) =>
+                                    d === diagnose.code ? (
+                                        <li>
+                                            {diagnose.code} {diagnose.name}
+                                        </li>
+                                    ) : null
+                                );
+                            })}
                         </ul>
                     </div>
                 );
@@ -88,5 +94,5 @@ const Notes: React.FC<{entries: Entry[] | undefined}> = ({entries}) => {
         </Container>
     );
 };
-// TODO
+
 export default PatientPage;
