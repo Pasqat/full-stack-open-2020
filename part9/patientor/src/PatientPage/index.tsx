@@ -3,7 +3,7 @@ import {useParams} from "react-router-dom";
 import axios from "axios";
 import {Container, Icon, Placeholder, List} from "semantic-ui-react";
 
-import {PatientDetails} from "../types";
+import {PatientDetails, Entry} from "../types";
 import {apiBaseUrl} from "../constants";
 import {useStateValue, setPatient} from "../state";
 
@@ -18,7 +18,7 @@ const PatientPage: React.FC = () => {
             return;
         }
         const fetchPatient = async () => {
-            console.log('fetching');
+            console.log("fetching");
             try {
                 const {data: patientFromApi} = await axios.get<PatientDetails>(
                     `${apiBaseUrl}/patients/${id}`
@@ -66,13 +66,25 @@ const PatientPage: React.FC = () => {
     );
 };
 
-const Notes: React.FC<{entries: string[] | undefined}> = ({entries}) => {
+const Notes: React.FC<{entries: Entry[] | undefined}> = ({entries}) => {
     return (
         <Container>
-            <p>Notes:</p>
-            <List>
-                {entries?.map((e, index) => <List.Item key={index}>{e}</List.Item>)}
-            </List>
+            <h3>Notes:</h3>
+            {entries?.map((e) => {
+                return (
+                    <div>
+                        <p>
+                            {e.date}{" "}
+                            <span style={{fontStyle: "italic"}}>{e.description}</span>
+                        </p>
+                        <ul>
+                            {e.diagnosisCodes?.map((d) => (
+                                <li key={d}>{d}</li>
+                            ))}
+                        </ul>
+                    </div>
+                );
+            })}
         </Container>
     );
 };
