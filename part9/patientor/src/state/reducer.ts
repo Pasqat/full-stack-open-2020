@@ -40,7 +40,6 @@ export const setPatient = (payload: Patient): Action => {
   };
 };
 
-
 export const setDiagnosis = (payload: Diagnosis[]): Action => {
   return {
     type: "SET_DIAGNOSIS",
@@ -71,7 +70,7 @@ export const reducer = (state: State, action: Action): State => {
           ),
           ...state.diagnosis
         }
-      }
+      };
     case "SET_PATIENT":
       return {
         ...state,

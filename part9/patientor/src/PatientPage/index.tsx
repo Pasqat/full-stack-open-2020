@@ -1,9 +1,11 @@
 import React from "react";
 import {useParams} from "react-router-dom";
 import axios from "axios";
-import {Container, Icon, Placeholder, List} from "semantic-ui-react";
+import {Container, Icon, Placeholder} from "semantic-ui-react";
 
-import {PatientDetails, Entry, Diagnosis} from "../types";
+import Notes from './Notes';
+
+import {PatientDetails} from "../types";
 import {apiBaseUrl} from "../constants";
 import {useStateValue, setPatient} from "../state";
 
@@ -55,44 +57,14 @@ const PatientPage: React.FC = () => {
                     <Icon name={patient.gender === "male" ? "mars" : "venus"} />
                 </h3>
                 <p>Date of birth: {patient.dateOfBirth}</p>
+                <p>occupation: {patient.occupation}</p>
             </Container>
             <Container>
-                <p>occupation: {patient.occupation}</p>
                 <Notes entries={patient.entries} />
             </Container>
         </div>
     );
 };
 
-const Notes: React.FC<{entries: Entry[] | undefined}> = ({entries}) => {
-    const [{diagnosis}] = useStateValue();
-
-    return (
-        <Container>
-            <h3>Notes:</h3>
-            {entries?.map((e) => {
-                return (
-                    <div key={e.date}>
-                        <p>
-                            {e.date}{" "}
-                            <span style={{fontStyle: "italic"}}>{e.description}</span>
-                        </p>
-                        <ul>
-                            {e.diagnosisCodes?.map((d: Diagnosis["code"]) => {
-                                Object.values(diagnosis).map((diagnose: Diagnosis) =>
-                                    d === diagnose.code ? (
-                                        <li>
-                                            {diagnose.code} {diagnose.name}
-                                        </li>
-                                    ) : null
-                                );
-                            })}
-                        </ul>
-                    </div>
-                );
-            })}
-        </Container>
-    );
-};
 
 export default PatientPage;
