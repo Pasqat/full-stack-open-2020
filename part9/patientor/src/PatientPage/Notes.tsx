@@ -28,7 +28,7 @@ const Notes: React.FC<{entries: Entry[] | undefined}> = ({entries}) => {
       <h3>Notes: </h3>
       {entries?.map((entry) => {
         return (
-          <div className="App">
+          <div className="App" key={entry.id}>
             <EntryDetails entry={entry} />
             <Divider hidden />
           </div>

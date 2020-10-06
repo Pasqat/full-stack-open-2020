@@ -1,6 +1,6 @@
 import React from "react";
 import {OccupationalHealthcareEntry, Diagnosis} from "../types";
-import {Container, Segment, Header, List, Icon} from "semantic-ui-react";
+import {Container, Segment, Header, List, Icon, Divider} from "semantic-ui-react";
 import {useStateValue} from "../state";
 
 const OccupationalHealtcareItem: React.FC<{e: OccupationalHealthcareEntry}> = ({e}) => {
@@ -19,19 +19,21 @@ const OccupationalHealtcareItem: React.FC<{e: OccupationalHealthcareEntry}> = ({
         <p>
           <span style={{fontStyle: "italic"}}> {e.description} </span>
         </p>
+        <Divider />
         <List>
-          {e.diagnosisCodes?.map((d: Diagnosis["code"]) => {
-            console.log(d);
-            Object.values(diagnosis).map((diagnose: Diagnosis) => {
-              console.log(diagnose);
-              return d === diagnose.code ? (
-                <List.Item>
-                  <List.Header>{diagnose.code} </List.Header>
-                  {diagnose.name}
-                </List.Item>
-              ) : null;
-            });
-          })}
+          {e.diagnosisCodes &&
+            e.diagnosisCodes.map((d: Diagnosis["code"]) => {
+              return Object.values(diagnosis).map((diagnose: Diagnosis) => {
+                return (
+                  d === diagnose.code && (
+                    <List.Item key={diagnose.code}>
+                      <List.Header>{diagnose.code} </List.Header>
+                      {diagnose.name}
+                    </List.Item>
+                  )
+                );
+              });
+            })}
         </List>
       </Segment>
     </Container >
