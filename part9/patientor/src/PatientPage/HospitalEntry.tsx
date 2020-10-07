@@ -26,7 +26,6 @@ const HospitalEntryItem: React.FC<{e: HospitalEntry}> = ({e}) => {
           <strong>Discharge:</strong>{" "}
           {e.discharge && `${e.discharge.date} ${e.discharge.criteria}`}{" "}
         </p>
-
         <Divider />
         <List>
           {e.diagnosisCodes &&

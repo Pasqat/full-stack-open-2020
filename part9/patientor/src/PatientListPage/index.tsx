@@ -60,7 +60,7 @@ const PatientListPage: React.FC = () => {
                             <Table.Cell>{patient.gender}</Table.Cell>
                             <Table.Cell>{patient.occupation}</Table.Cell>
                             <Table.Cell>
-                                <HealthRatingBar showText={false} rating={1} />
+                                <HealthRatingBar showText={false} rating={Math.floor(Math.random() * 4)} />
                             </Table.Cell>
                         </Table.Row>
                     ))}
