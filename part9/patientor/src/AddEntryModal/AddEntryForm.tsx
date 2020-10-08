@@ -8,8 +8,9 @@ import {
   NumberField,
   DiagnosisSelection,
 } from "../AddPatientModal/FormField";
-import { Entry,
-  // HealthCheckRating, Diagnosis
+import {
+  Entry,
+  //  Diagnosis
 } from "../types";
 import { useStateValue } from "../state";
 
@@ -20,15 +21,9 @@ interface Props {
   onCancel: () => void;
 }
 
-// const healtCheckRatingOptions: HealthCheckRating[] = [
-//     { value: HealthCheckRating.Healty, label: "Healty" }
-//     { value: HealthCheckRating.LowRisk, label: "Low Risk" }
-//     { value: HealthCheckRating.HighRisk, label: "High Risk" }
-//     { value: HealthCheckRating.CriticalRisk, label: "Critical Risk" }
-// ]
-
 export const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
   const [{ diagnosis }] = useStateValue();
+
   return (
     <Formik
       initialValues={{
@@ -39,12 +34,22 @@ export const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
         diagnosisCodes: [""],
       }}
       onSubmit={onSubmit}
-      // validate={values => {
-      //     const requiredError = "Field is required";
-      //     const errors: { [field: string]: string } = {}
-      // }}
+      validate={(values) => {
+        const requiredError = "Field is required";
+        const errors: { [field: string]: string } = {};
+        if (!values.date) {
+          errors.date = requiredError;
+        }
+        if (!values.description) {
+          errors.description = requiredError;
+        }
+        if (!values.specialist) {
+          errors.specialist = requiredError;
+        }
+        return errors
+      }}
     >
-      {({ dirty, setFieldValue, setFieldTouched }) => {
+      {({ isValid, dirty, setFieldValue, setFieldTouched }) => {
         return (
           <Form className="form ui">
             <Field
@@ -89,7 +94,7 @@ export const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
                   type="submit"
                   floated="right"
                   color="green"
-                  disabled={!dirty}
+                  disabled={!dirty || !isValid}
                 >
                   Add
                 </Button>
