@@ -219,7 +219,7 @@ const parseEntryType = (entryType: any): EntryType => {
 
 const parseHealtCheckRating = (healthCheckRating: any): HealthCheckRating => {
   if (
-    !(healthCheckRating === 0 || healthCheckRating <= 0) ||
+    !(healthCheckRating === 0 || healthCheckRating <= 3) ||
     !isHealthCheckRating(healthCheckRating)
   ) {
     throw new Error("Incorrect or missing gender: " + healthCheckRating);

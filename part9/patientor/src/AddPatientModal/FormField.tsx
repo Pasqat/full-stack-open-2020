@@ -60,12 +60,13 @@ interface NumberProps extends FieldProps {
   errorMessage?: string;
   min: number;
   max: number;
+  placeholder: string;
 }
 
-export const NumberField: React.FC<NumberProps> = ({field, label, min, max}) => (
+export const NumberField: React.FC<NumberProps> = ({field, label, min, max, placeholder}) => (
   <Form.Field>
     <label>{label}</label>
-    <Field {...field} type='number' min={min} max={max} />
+    <Field placeholder={placeholder} {...field} type='number' min={min} max={max} />
 
     <div style={{color: 'red'}}>
       <ErrorMessage name={field.name} />
@@ -101,6 +102,7 @@ export const DiagnosisSelection = ({
     <Form.Field>
       <label>Diagnoses</label>
       <Dropdown
+        placeholder="Select a Code"
         fluid
         multiple
         search
