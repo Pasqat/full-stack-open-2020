@@ -1,10 +1,19 @@
 import React from "react";
-import {OccupationalHealthcareEntry, Diagnosis} from "../types";
-import {Container, Segment, Header, List, Icon, Divider} from "semantic-ui-react";
-import {useStateValue} from "../state";
+import { OccupationalHealthcareEntry, Diagnosis } from "../types";
+import {
+  Container,
+  Segment,
+  Header,
+  List,
+  Icon,
+  Divider,
+} from "semantic-ui-react";
+import { useStateValue } from "../state";
 
-const OccupationalHealtcareItem: React.FC<{e: OccupationalHealthcareEntry}> = ({e}) => {
-  const [{diagnosis}] = useStateValue();
+const OccupationalHealtcareItem: React.FC<{
+  e: OccupationalHealthcareEntry;
+}> = ({ e }) => {
+  const [{ diagnosis }] = useStateValue();
 
   return (
     <Container>
@@ -17,7 +26,11 @@ const OccupationalHealtcareItem: React.FC<{e: OccupationalHealthcareEntry}> = ({
           </Header.Content>
         </Header>
         <p>
-          <span style={{fontStyle: "italic"}}> {e.description} </span>
+          <span style={{ fontStyle: "italic" }}> {e.description} </span>
+        </p>
+        <Header as="h4">Sick Leave</Header>
+        <p>
+          {e.sickLeave?.startDate} - {e.sickLeave?.endDate}
         </p>
         <Divider />
         <List>
@@ -36,7 +49,7 @@ const OccupationalHealtcareItem: React.FC<{e: OccupationalHealthcareEntry}> = ({
             })}
         </List>
       </Segment>
-    </Container >
+    </Container>
   );
 };
 
