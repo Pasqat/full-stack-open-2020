@@ -5,7 +5,7 @@ import {
   NewPatientsEntry,
   Gender,
   NewEntry,
-//   Entry,
+  //   Entry,
   HealthCheckRating,
   Discharge,
   SickLeave,
@@ -56,17 +56,17 @@ const toNewEntry = (object: any | undefined): NewEntry => {
   switch (entryType) {
     case "HealthCheck":
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const { healtCheckRating } = otherValues;
-      const healtCheckEntry: NewHealthCheckEntry = {
+      const {healthCheckRating} = otherValues;
+      const healthCheckEntry: NewHealthCheckEntry = {
         type: entryType,
         ...NewBaseEntry,
-        healthCheckRating: parseHealtCheckRating(healtCheckRating),
+        healthCheckRating: parseHealtCheckRating(healthCheckRating),
       };
-      return healtCheckEntry;
+      return healthCheckEntry;
 
     case "Hospital":
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const { discharge } = otherValues;
+      const {discharge} = otherValues;
       const hospitalEntry: NewHospitalEntry = {
         type: entryType,
         ...NewBaseEntry,
@@ -76,7 +76,7 @@ const toNewEntry = (object: any | undefined): NewEntry => {
 
     case "OccupationalHealthcare":
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const { emplayerName, sickLeave } = otherValues;
+      const {emplayerName, sickLeave} = otherValues;
 
       const occupationalHealtCareEntry: NewOccupationalHealthcareEntry = {
         type: entryType,
@@ -91,7 +91,7 @@ const toNewEntry = (object: any | undefined): NewEntry => {
       return occupationalHealtCareEntry;
 
     default:
-      return assertNever({ ...object });
+      return assertNever({...object});
   }
 };
 
@@ -121,6 +121,7 @@ const parseDateOfBirth = (dateOfBirth: any): string => {
 };
 
 const parseGender = (gender: any): Gender => {
+  console.log('parse gender')
   if (!gender || !isGender(gender)) {
     throw new Error("Incorrect or missing gender: " + gender);
   }
@@ -172,7 +173,7 @@ const parseDischarge = (discharge: any): Discharge => {
   if (!discharge || !isDischarge(discharge)) {
     throw new Error('Incorrect on missing discharge: ' + discharge);
   }
-  const { date, criteria } = discharge;
+  const {date, criteria} = discharge;
   if (!isDate(date)) {
     throw new Error("Incorrect or missing Date");
   }
@@ -186,7 +187,7 @@ const parseSickLeave = (sickLeave: any): SickLeave => {
   if (!sickLeave || !isSickLeave(sickLeave)) {
     throw new Error(`Incorrect on missing` + sickLeave);
   }
-  const { startDate, endDate } = sickLeave;
+  const {startDate, endDate} = sickLeave;
   if (!isDate(startDate)) {
     throw new Error("Incorrect or missing start date");
   }
@@ -218,11 +219,12 @@ const parseEntryType = (entryType: any): EntryType => {
 };
 
 const parseHealtCheckRating = (healthCheckRating: any): HealthCheckRating => {
+  console.log('parse healthCheckRating')
   if (
     !(healthCheckRating === 0 || healthCheckRating <= 3) ||
     !isHealthCheckRating(healthCheckRating)
   ) {
-    throw new Error("Incorrect or missing gender: " + healthCheckRating);
+    throw new Error("Incorrect or missing healt check Rating: " + healthCheckRating);
   }
 
   return healthCheckRating;
@@ -275,4 +277,4 @@ const isHealthCheckRating = (param: any): param is HealthCheckRating => {
   return Object.values(HealthCheckRating).includes(param);
 };
 
-export { toNewPatientEntry, toNewEntry };
+export {toNewPatientEntry, toNewEntry};

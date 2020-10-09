@@ -85,7 +85,7 @@ export const TextField: React.FC<TextProps> = ({
 */
 interface NumberProps extends FieldProps {
   label: string;
-  errorMessage?: string;
+  // errorMessage?: string;
   min: number;
   max: number;
   placeholder: string;
@@ -97,8 +97,9 @@ export const NumberField: React.FC<NumberProps> = ({
   min,
   max,
   placeholder,
-}) => (
-  <Form.Field>
+}) => {
+  console.log('field', field, 'label',label, 'min', min, 'max', max)
+ return ( <Form.Field>
     <label>{label}</label>
     <Field
       placeholder={placeholder}
@@ -112,7 +113,8 @@ export const NumberField: React.FC<NumberProps> = ({
       <ErrorMessage name={field.name} />
     </div>
   </Form.Field>
-);
+ )
+}
 
 interface TypeSelectionProps extends TextProps {
   label: string;

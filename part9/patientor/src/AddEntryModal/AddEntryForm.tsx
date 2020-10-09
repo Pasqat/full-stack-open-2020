@@ -9,10 +9,7 @@ import {
   TypeOption,
   SelectType,
 } from "../AddPatientModal/FormField";
-import {
-  Entry,
-  //  Diagnosis
-} from "../types";
+import { Entry } from "../types";
 import { useStateValue } from "../state";
 
 export type EntryFormValues = Omit<Entry, "id">;
@@ -29,8 +26,8 @@ const InputByType: React.FC<{ types: Entry["type"] }> = ({ types }) => {
         <>
           <Field
             label="Healt Check Rating"
-            placeholder="0"
-            name="healtCheckRating"
+            placeholder="0 = Healty, 3 = Critical Risk"
+            name="healthCheckRating"
             component={NumberField}
             min={0}
             max={3}
@@ -40,7 +37,7 @@ const InputByType: React.FC<{ types: Entry["type"] }> = ({ types }) => {
     case "Hospital":
       return (
         <>
-        <Header as='h3'>Discharge</Header>
+          <Header as="h3">Discharge</Header>
           <Grid stackable columns={2}>
             <Grid.Column>
               <Field
@@ -92,7 +89,7 @@ const InputByType: React.FC<{ types: Entry["type"] }> = ({ types }) => {
         </>
       );
     default:
-      return <div>Please select one type of treatment</div>
+      return <div>Please select one type of treatment</div>;
   }
 };
 
@@ -114,7 +111,7 @@ export const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
         specialist: "",
         description: "",
         diagnosisCodes: [""],
-        healthCheckRating: "",
+        healthCheckRating: 0,
         empolyerName: "",
         sickLeave: {
           stratDate: "",
@@ -127,28 +124,36 @@ export const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
       }}
       onSubmit={onSubmit}
       validate={(values) => {
-        // const requiredError = "Field is required";
-        // const errors: { [field: string]: string } = {};
-        // if (!values.date) {
-        //   errors.date = requiredError;
-        // }
-        // if (!values.description) {
-        //   errors.description = requiredError;
-        // }
-        // if (!values.specialist) {
-        //   errors.specialist = requiredError;
-        // }
-        // if (!values.empolyerName) {
-        //   errors.employerName = requiredError;
-        // }
-        // // if (!values.discharge) {
-        // //   errors.discharge = requiredError
-        // // }
-        // return errors;
+        const requiredError = "Field is required";
+        const errors: { [field: string]: string } = {};
+        if (!values.date) {
+          errors.date = requiredError;
+        }
+        if (!values.description) {
+          errors.description = requiredError;
+        }
+        if (!values.specialist) {
+          errors.specialist = requiredError;
+        }
+        if (
+          values.type === ("OccupationalHealtcare" as Entry["type"]) &&
+          !values.empolyerName
+        ) {
+          errors.employerName = requiredError;
+        }
+        if (values.type === "Hospital" && !values.discharge.criteria) {
+          errors.discharge = requiredError;
+        }
+        if (values.type === "Hospital" && !values.discharge.date) {
+          errors.discharge = requiredError;
+        }
+        if (values.type === "HealthCheck" && !values.healthCheckRating && values.healthCheckRating !== 0) {
+          errors.healthCheckRating = requiredError;
+        }
+        return errors;
       }}
     >
       {({ isValid, dirty, setFieldValue, setFieldTouched, values }) => {
-        console.log(isValid);
         return (
           <Form className="form ui">
             <SelectType label="Select one" name="type" options={typeOptions} />
